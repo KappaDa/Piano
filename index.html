@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+
+        <!--RWD Meta-->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Piano for Vue.js</title>
+
+        <!--icon CSS-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!--CSS-->
+        <link rel="stylesheet" href="assets/css/index.css">
+
+    </head>
+
+    <body>
+
+        <div id="app">
+            <div class="audioplayer" v-for = "s in sounddata">
+                <audio v-bind:data-num = "s.number">
+                    <source type="audio/ogg" v-bind:src="s.url">
+                </audio>
+            </div>
+
+            <div class="center_box">
+                <h2>Vue.js Piano</h2>
+
+                <div class="keyboard">
+                    <div class="pianokey" v-for = "s in display_keys">
+                        <div class="white" v-if = "s.type == 'white'" v-on:click = "addnote(s.num)" v-bind:class = "( playing_time && get_current_hightlight(s.num) ) || ( now_press_key == s.key ) ? 'playing' : '' ">
+                            <div class="label">{{String.fromCharCode(s.key)}}</div>
+                        </div>
+                        <div class="black" v-if = "s.type == 'black'" v-on:click = "addnote(s.num)" v-bind:class = "( playing_time && get_current_hightlight(s.num) ) || ( now_press_key == s.key ) ? 'playing' : '' ">
+                            <div class="label">{{String.fromCharCode(s.key)}}</div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="controls">
+                    <ul class="notes_list" v-if = "notes.length > 0">
+                        <li v-for = "(note, id) in notes" v-bind:class = "now_note_id - 1 == id ? 'playing' : '' ">
+                            <div class="num" v-on:mouseover = "playnote(note.num, 1)">{{note.num}}</div>
+                            <div class="time">{{note.time}}</div>
+                        </li>
+                    </ul>
+                    <button v-on:click = "load_sample">Sample</button>
+                    <button v-on:click = "playnext(1)">playnext</button>
+                    <button v-if = "playing_time <= 1" v-on:click = "startplay">
+                        Start Play
+                        <i class="fa fa-play"></i>
+                    </button>
+                    <button v-if = "playing_time > 1" v-on:click = "stopplay">
+                        Stop Play
+                        <i class="fa fa-pause"></i>
+                    </button>
+                    <button v-if = "record_time <= 0" v-on:click = "start_record">
+                        Record
+                        <i class="fa fa-circle"></i>
+                    </button>
+                    <button v-if = "record_time > 0" v-on:click = "stop_record">
+                        Stop Record
+                        <i class="fa fa-stop"></i>
+                    </button>
+                    <button v-on:click = "notes = []">Clear</button>
+                    <h4>{{playing_time + record_time}}</h4>
+                </div>
+            </div>
+
+        </div>
+
+        <!----------------------SCRIPT---------------------->
+
+        <!--JS Framework-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.js"></script>
+
+        <!--JavaScript-->
+        <script type="text/javascript" src="assets/js/index.js"></script>
+
+    </body>
+
+</html>
